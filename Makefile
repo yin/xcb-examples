@@ -1,13 +1,18 @@
 CC=gcc
 CFLAGS=-c -Wall
-LDFLAGS=-lxcb
+LDFLAGS=
 SOURCES=xcb_box.c
+LIBS=xcb
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=$(SOURCES:.c=)
+EXECUTABLES=$(SOURCES:.c=)
 
-all: $(SOURCES) $(EXECUTABLE)
+# Use pkg-config to supply flags for gcc
+CFLAGS += `pkg-config --cflags`
+LDFLAGS += `pkg-config --libs $(LIBS)`
 
-$(EXECUTABLE): $(OBJECTS) 
+all: $(SOURCES) $(EXECUTABLES)
+
+$(EXECUTABLES): $(OBJECTS) 
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
 .cpp.o:
